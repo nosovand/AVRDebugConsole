@@ -1,10 +1,33 @@
+#include "Arduino.h"
 #ifndef SPI_MASTER_HPP
 #define SPI_MASTER_HPP
+
+#define MAX_MASTER_MESSAGE_SIZE 12
 
 #include <SPI.h>
 #include "SPI_Master.hpp"
 
-char txMsg[8] = "";
+char txMsg[MAX_MASTER_MESSAGE_SIZE] = "";
+
+void countDoubleDigits(double number, int *mainDigits, int *decimalDigits) {
+    // Handling negative numbers by taking the absolute value
+    number = fabs(number);
+    // Counting main digits
+    *mainDigits = number == 0 ? 1 : (int)log10(number) + 1;
+    // Counting decimal digits
+    *decimalDigits = 0;
+
+    double decimalPart = number - floor(number);
+    double precision = 1e-4; // Adjust the precision as needed
+
+    while (decimalPart > precision) {
+        decimalPart *= 10;
+        decimalPart = fmod(decimalPart, 1.0);
+        (*decimalDigits)++;
+        if (decimalPart > (0.999))
+          break;
+    }
+}
 
 //SPI init
 void SPIMasterInit()
@@ -84,8 +107,14 @@ void SPITransferMessageln(char* message)
 void SPITransferMessage(double message)
 {
   int x;
-  dtostrf(message, 4, 2, txMsg);
-  size_t length = strlen(txMsg);
+  int mainDigits, decimalDigits;
+  countDoubleDigits(message, &mainDigits, &decimalDigits);
+  if((mainDigits + decimalDigits) > (MAX_MASTER_MESSAGE_SIZE - 1)){
+    decimalDigits = MAX_MASTER_MESSAGE_SIZE - mainDigits - 1;
+  }
+  //convert double to char array
+  dtostrf(message, mainDigits, decimalDigits, txMsg);
+  size_t length = MAX_MASTER_MESSAGE_SIZE;
 
   x = SPI.transfer('<'); // start mark
 
@@ -100,8 +129,14 @@ void SPITransferMessage(double message)
 void SPITransferMessageln(double message)
 {
   int x;
-  dtostrf(message, 4, 2, txMsg);
-  size_t length = strlen(txMsg);
+  int mainDigits, decimalDigits;
+  countDoubleDigits(message, &mainDigits, &decimalDigits);
+  if((mainDigits + decimalDigits) > (MAX_MASTER_MESSAGE_SIZE - 1)){
+    decimalDigits = MAX_MASTER_MESSAGE_SIZE - mainDigits - 1;
+  }
+  //convert double to char array
+  dtostrf(message, mainDigits, decimalDigits, txMsg);
+  size_t length = MAX_MASTER_MESSAGE_SIZE;
 
   x = SPI.transfer('<'); // start mark
 

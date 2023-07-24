@@ -12,4 +12,6 @@ void SPITransferMessageln(char* message);
 void SPITransferMessage(double message);
 void SPITransferMessageln(double message);
 
+void countDoubleDigits(double number, int *mainDigits, int *decimalDigits);
+
 #endif

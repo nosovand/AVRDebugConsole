@@ -1,14 +1,22 @@
 #include "debugConsole.hpp"
 
 void setup() {
-  // put your setup code here, to run once:
+  // initialize debug console
   debugConsole.init(DEBUG_CONSOLE_MODE_SPI);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  //print test messages
   debugConsole.print(F("test "));
-  debugConsole.println("1");
+  debugConsole.println("messages:");
   debugConsole.println(34.35);
-  debugConsole.print(23);
+  debugConsole.println(-34.35);
+  debugConsole.println(0.123456789);
+  debugConsole.println(0.0012);
+  debugConsole.print(-0.0012);
+  debugConsole.println("");
+  debugConsole.println(-0.0012);
+  debugConsole.println(16777216.0625);
+  debugConsole.println(23);
+  delay(5000);
 }
