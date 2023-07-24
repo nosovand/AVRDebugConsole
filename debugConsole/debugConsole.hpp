@@ -14,13 +14,14 @@ private:
 public:
     DebugConsole(/* args */);
     ~DebugConsole();
-    void init(uint8_t mode, uint8_t serialBaud = 115200);
+    void init(uint8_t mode, long serialBaud = 115200);
     void print(char *message);
     void println(char *message);
     void print(double message);
     void println(double message);
     void print(const __FlashStringHelper *message);
     void println(const __FlashStringHelper *message);
+    uint8_t getConsoleMode();
 };
 
 extern DebugConsole debugConsole;

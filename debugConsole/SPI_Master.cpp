@@ -1,19 +1,20 @@
+#include "HardwareSerial.h"
 #include "Arduino.h"
 #ifndef SPI_MASTER_HPP
 #define SPI_MASTER_HPP
 
-#define MAX_MASTER_MESSAGE_SIZE 12
+#define MAX_MASTER_MESSAGE_SIZE 16
 
 #include <SPI.h>
 #include "SPI_Master.hpp"
 
 char txMsg[MAX_MASTER_MESSAGE_SIZE] = "";
 
-void countDoubleDigits(double number, int *mainDigits, int *decimalDigits) {
+void countDoubleDigits(double number, int *integerDigits, int *decimalDigits) {
     // Handling negative numbers by taking the absolute value
     number = fabs(number);
     // Counting main digits
-    *mainDigits = number == 0 ? 1 : (int)log10(number) + 1;
+    *integerDigits = number == 0 ? 1 : (int)log10(number) + 1;
     // Counting decimal digits
     *decimalDigits = 0;
 
@@ -107,14 +108,21 @@ void SPITransferMessageln(char* message)
 void SPITransferMessage(double message)
 {
   int x;
-  int mainDigits, decimalDigits;
-  countDoubleDigits(message, &mainDigits, &decimalDigits);
-  if((mainDigits + decimalDigits) > (MAX_MASTER_MESSAGE_SIZE - 1)){
-    decimalDigits = MAX_MASTER_MESSAGE_SIZE - mainDigits - 1;
+  int integerDigits = 0, decimalDigits = 0;
+
+  countDoubleDigits(message, &integerDigits, &decimalDigits);
+  if(abs(integerDigits) > MAX_MASTER_MESSAGE_SIZE - 2){
+    //check for buffer overflow
+    SPITransferMessageln(F("ovf"));
+    return;
+  }
+  if((abs(integerDigits) + abs(decimalDigits)) > (MAX_MASTER_MESSAGE_SIZE - 2)){
+    //adjust demial digits according to number size
+    decimalDigits = MAX_MASTER_MESSAGE_SIZE - integerDigits - 2;
   }
   //convert double to char array
-  dtostrf(message, mainDigits, decimalDigits, txMsg);
-  size_t length = MAX_MASTER_MESSAGE_SIZE;
+  dtostrf(message, integerDigits+decimalDigits, decimalDigits, txMsg);
+  size_t length = strlen(txMsg);
 
   x = SPI.transfer('<'); // start mark
 
@@ -126,17 +134,25 @@ void SPITransferMessage(double message)
   x = SPI.transfer('>');  // end mark
 }
 
+
 void SPITransferMessageln(double message)
 {
   int x;
-  int mainDigits, decimalDigits;
-  countDoubleDigits(message, &mainDigits, &decimalDigits);
-  if((mainDigits + decimalDigits) > (MAX_MASTER_MESSAGE_SIZE - 1)){
-    decimalDigits = MAX_MASTER_MESSAGE_SIZE - mainDigits - 1;
+  int integerDigits = 0, decimalDigits = 0;
+
+  countDoubleDigits(message, &integerDigits, &decimalDigits);
+  if(abs(integerDigits) > MAX_MASTER_MESSAGE_SIZE - 2){
+    //check for buffer overflow
+    SPITransferMessageln(F("ovf"));
+    return;
+  }
+  if((abs(integerDigits) + abs(decimalDigits)) > (MAX_MASTER_MESSAGE_SIZE - 2)){
+    //adjust demial digits according to number size
+    decimalDigits = MAX_MASTER_MESSAGE_SIZE - integerDigits - 2;
   }
   //convert double to char array
-  dtostrf(message, mainDigits, decimalDigits, txMsg);
-  size_t length = MAX_MASTER_MESSAGE_SIZE;
+  dtostrf(message, integerDigits+decimalDigits, decimalDigits, txMsg);
+  size_t length = strlen(txMsg);
 
   x = SPI.transfer('<'); // start mark
 

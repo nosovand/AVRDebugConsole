@@ -1,3 +1,4 @@
+#include "HardwareSerial.h"
 #include "debugConsole.hpp"
 #include "SPI_Master.hpp"
 
@@ -11,7 +12,7 @@ DebugConsole::~DebugConsole()
 {
 }
 
-void DebugConsole::init(uint8_t mode, uint8_t serialBaud)
+void DebugConsole::init(uint8_t mode, long serialBaud)
 {
     /**
      * @brief Initialize the debug console
@@ -74,8 +75,9 @@ void DebugConsole::println(char *message)
     }
     else if (debugConsoleMode == DEBUG_CONSOLE_MODE_UART_AND_SPI)
     {
-        SPITransferMessageln(message);
         Serial.println(message);
+        Serial.flush();
+        SPITransferMessageln(message);
     }
 }
 
@@ -118,8 +120,9 @@ void DebugConsole::println(double message)
     }
     else if (debugConsoleMode == DEBUG_CONSOLE_MODE_UART_AND_SPI)
     {
-        SPITransferMessageln(message);
         Serial.println(message);
+        Serial.flush();
+        SPITransferMessageln(message);
     }
 }
 
@@ -140,8 +143,9 @@ void DebugConsole::print(const __FlashStringHelper *message)
     }
     else if (debugConsoleMode == DEBUG_CONSOLE_MODE_UART_AND_SPI)
     {
-        SPITransferMessage(message);
         Serial.print(message);
+        Serial.flush();
+        SPITransferMessage(message);
     }
 }
 
@@ -165,4 +169,8 @@ void DebugConsole::println(const __FlashStringHelper *message)
         SPITransferMessageln(message);
         Serial.println(message);
     }
+}
+
+uint8_t DebugConsole::getConsoleMode(){
+  return debugConsoleMode;
 }
