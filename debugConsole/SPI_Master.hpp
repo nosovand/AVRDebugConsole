@@ -9,6 +9,8 @@ void SPITransferMessage(const __FlashStringHelper* message);
 void SPITransferMessageln(const __FlashStringHelper* message);
 void SPITransferMessage(char* message);
 void SPITransferMessageln(char* message);
+void SPITransferMessage(String& message);
+void SPITransferMessageln(String& message);
 void SPITransferMessage(double message);
 void SPITransferMessageln(double message);
 
