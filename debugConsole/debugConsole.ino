@@ -7,6 +7,8 @@ void setup() {
   //debugConsole.init(DEBUG_CONSOLE_MODE_SPI);
 }
 
+String testArduinoString = "test arduino string";
+
 void loop() {
   //print test messages
   debugConsole.print(F("test "));
@@ -22,5 +24,6 @@ void loop() {
   debugConsole.println(16777216.0625);
   debugConsole.println(23);
   debugConsole.println(123456789123456789.123456789123456789); //should trigger overflow
+  debugConsole.println(testArduinoString); //not tested
   delay(5000);
 }

@@ -19,6 +19,8 @@ public:
     void println(char *message);
     void print(double message);
     void println(double message);
+    void print(String& message);
+    void println(String& message);
     void print(const __FlashStringHelper *message);
     void println(const __FlashStringHelper *message);
     uint8_t getConsoleMode();

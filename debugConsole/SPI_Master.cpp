@@ -104,6 +104,33 @@ void SPITransferMessageln(char* message)
   x = SPI.transfer('&');  // end mark
 }
 
+void SPITransferMessage(String& message){
+  int x;
+  size_t length = message.length();
+
+  x = SPI.transfer('<'); // start mark
+
+    for (size_t i = 0; i < length; i++)
+  {
+    x = SPI.transfer(message[i]);
+  }
+
+  x = SPI.transfer('>');  // end mark
+}
+
+void SPITransferMessageln(String& message){
+  int x;
+  size_t length = message.length();
+
+  x = SPI.transfer('<'); // start mark
+
+    for (size_t i = 0; i < length; i++)
+  {
+    x = SPI.transfer(message[i]);
+  }
+
+  x = SPI.transfer('&');  // end mark
+}
 
 void SPITransferMessage(double message)
 {
