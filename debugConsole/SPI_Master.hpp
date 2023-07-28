@@ -11,6 +11,8 @@ void SPITransferMessage(char* message);
 void SPITransferMessageln(char* message);
 void SPITransferMessage(String& message);
 void SPITransferMessageln(String& message);
+void SPITransferMessage(const char* message);
+void SPITransferMessageln(const char* message);
 void SPITransferMessage(double message);
 void SPITransferMessageln(double message);
 

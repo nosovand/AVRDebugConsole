@@ -17,6 +17,8 @@ public:
     void init(uint8_t mode, long serialBaud = 115200);
     void print(char *message);
     void println(char *message);
+    void print(const char *message);
+    void println(const char *message);
     void print(double message);
     void println(double message);
     void print(String& message);

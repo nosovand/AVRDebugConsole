@@ -1,5 +1,7 @@
 #include "debugConsole.hpp"
 
+const char* testConstMessage = "test const message";
+
 void setup() {
   // initialize debug console
   debugConsole.init(DEBUG_CONSOLE_MODE_UART_AND_SPI);
@@ -24,6 +26,11 @@ void loop() {
   debugConsole.println(16777216.0625);
   debugConsole.println(23);
   debugConsole.println(123456789123456789.123456789123456789); //should trigger overflow
-  debugConsole.println(testArduinoString); //not tested
+  debugConsole.println(testArduinoString);
+  debugConsole.print(testArduinoString);
+  debugConsole.println("");
+  debugConsole.println(testConstMessage); 
+  debugConsole.print(testConstMessage);
+  debugConsole.println("");
   delay(5000);
 }

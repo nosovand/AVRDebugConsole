@@ -132,6 +132,37 @@ void SPITransferMessageln(String& message){
   x = SPI.transfer('&');  // end mark
 }
 
+void SPITransferMessage(const char* message)
+{
+  int x;
+  const char* strPtr = reinterpret_cast<const char*>(message);
+  size_t length = strlen(strPtr);
+  x = SPI.transfer('<'); // start mark
+
+  for (size_t i = 0; i < length; i++)
+  {
+    x = SPI.transfer(strPtr[i]);
+  }
+
+  x = SPI.transfer('>');  // end mark
+}
+
+void SPITransferMessageln(const char* message)
+{
+  int x;
+  const char* strPtr = reinterpret_cast<const char*>(message);
+  size_t length = strlen(strPtr);
+
+  x = SPI.transfer('<'); // start mark
+
+  for (size_t i = 0; i < length; i++)
+  {
+    x = SPI.transfer(strPtr[i]);
+  }
+
+  x = SPI.transfer('&');  // end mark
+}
+
 void SPITransferMessage(double message)
 {
   int x;
