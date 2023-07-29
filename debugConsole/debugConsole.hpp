@@ -26,6 +26,7 @@ public:
     void print(const __FlashStringHelper *message);
     void println(const __FlashStringHelper *message);
     uint8_t getConsoleMode();
+    void println();
 };
 
 extern DebugConsole debugConsole;

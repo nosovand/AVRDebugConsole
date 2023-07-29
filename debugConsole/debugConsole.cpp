@@ -262,3 +262,24 @@ void DebugConsole::println(const __FlashStringHelper *message)
 uint8_t DebugConsole::getConsoleMode(){
   return debugConsoleMode;
 }
+
+void DebugConsole::println()
+{
+    /**
+     * @brief Print a new line
+     * @return None
+    */
+    if (debugConsoleMode == DEBUG_CONSOLE_MODE_SPI)
+    {
+        SPITransferMessageln("");
+    }
+    else if (debugConsoleMode == DEBUG_CONSOLE_MODE_UART)
+    {
+        Serial.println();
+    }
+    else if (debugConsoleMode == DEBUG_CONSOLE_MODE_UART_AND_SPI)
+    {
+        SPITransferMessageln("");
+        Serial.println();
+    }
+}
