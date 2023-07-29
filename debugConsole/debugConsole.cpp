@@ -260,5 +260,44 @@ void DebugConsole::println(const __FlashStringHelper *message)
 }
 
 uint8_t DebugConsole::getConsoleMode(){
+    /**
+     * @brief Get the current debug console mode
+     * @param None
+     * @return debugConsoleMode: Current debug console mode
+    */
   return debugConsoleMode;
+}
+
+uint8_t DebugConsole::available(){
+    /**
+     * @brief Check if there is a message available in the SPI buffer
+     * @param None
+     * @return 1: Message available, 0: No message available
+    */
+  return SPIMessageAvailable();
+}
+
+char* DebugConsole::readString(){
+    /**
+     * @brief Read a string from the SPI buffer, dont use to check for specific input
+     * @param None
+     * @return rxMsg: last received string read from the SPI buffer
+    */
+  return SPIReceiveLastMessage();
+}
+
+uint8_t DebugConsole::receivedString(char* string){
+    /**
+     * @brief Check if a string has been received, use this to check for specific input
+     * @param string: String to be checked
+     * @return 1: String received, 0: String not received
+    */
+  char *result = strstr(SPIReceiveLastMessage(), string);
+  SPIEraseRxMessageString();
+  if (result != NULL) {
+    return 1;
+  }
+  else{
+    return 0;
+  }
 }

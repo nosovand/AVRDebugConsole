@@ -2,23 +2,30 @@
 #include "FIFO.h"
 #define MAX_MESSAGE_SIZE 128
 FIFO fifo(1024);
+FIFO serial_fifo(128);
 char rxMsg[MAX_MESSAGE_SIZE] = "";
 volatile bool flag1 = false;
 bool flag2 = false;
 int i = 0;
+
 
 void setup()
 {
   Serial.begin(115200);
   Serial.println("Slave started");
   pinMode(SS, INPUT_PULLUP);  //SPI.h helps to get the meaning of SS
-  pinMode(MOSI, OUTPUT);      //should be made output to send data to Master
+  pinMode(MISO, OUTPUT);      //should be made output to send data to Master
   SPCR |= _BV(SPE);         //SPI Port is enabled
+  SPCR |= !(_BV(MSTR)); //Arduino is Slave
   SPI.attachInterrupt();    //SPI interrupt is enabled
 }
 
 void loop()
 {
+  if(Serial.available() > 0){
+    uint8_t in = Serial.read();
+    serial_fifo.push(in);
+  }
   if (!fifo.isEmpty())  //SPDR has data
   {
     if (flag2 == false) //start mark of message not yet received
@@ -68,7 +75,12 @@ void cleanMessageArray(){
 
 ISR (SPI_STC_vect)   //MCU comes here when there is a data byte in SPDR
 {
+  uint8_t rx = SPDR;
+  SPDR = 0;
+  uint8_t tx = serial_fifo.pop();
+  SPDR = tx;
   if(!fifo.isFull() || SPDR == '&' || SPDR == '<' || SPDR == '>'){
-    fifo.push(SPDR);
+    fifo.push(rx);
   }
+  
 }

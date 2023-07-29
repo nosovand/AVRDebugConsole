@@ -25,6 +25,10 @@ public:
     void println(String& message);
     void print(const __FlashStringHelper *message);
     void println(const __FlashStringHelper *message);
+
+    uint8_t available();
+    char* readString();
+    uint8_t receivedString(char* string);
     uint8_t getConsoleMode();
 };
 
