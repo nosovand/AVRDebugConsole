@@ -10,6 +10,8 @@ void setup() {
 
 const char* testConstMessage = "test const message";
 String testArduinoString = "test Arduino String";
+char c;
+int integer;
 
 void loop() {
   //print test messages
@@ -34,6 +36,9 @@ void loop() {
   debugConsole.println("");
   debugConsole.println(debugConsole.available()); 
   debugConsole.println(debugConsole.readString()); //does not erase input buffer, should not be used for triggering events !!
-  debugConsole.println(debugConsole.receivedString("++a")); //erases input buffer, can be used to trigger events
+  //debugConsole.println(debugConsole.receivedString("++a")); //erases input buffer, can be used to trigger events
+  debugConsole.readParsedString(c, integer);
+  debugConsole.println(c);
+  debugConsole.println(integer);
   delay(5000);
 }

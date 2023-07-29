@@ -28,6 +28,7 @@ public:
 
     uint8_t available();
     char* readString();
+    void readParsedString(char& character, int& number);
     uint8_t receivedString(char* string);
     uint8_t getConsoleMode();
 };

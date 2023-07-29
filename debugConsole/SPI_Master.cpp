@@ -47,6 +47,11 @@ size_t getFStringLength(const __FlashStringHelper *ifsh)
   return n;
 }
 
+uint8_t SPIMaxReceiveMessageSize(){
+  return MAX_SLAVE_MESSAGE_SIZE;
+}
+
+
 void SPIEraseRxMessageString(){
   memset(rxMsg, '\0', MAX_SLAVE_MESSAGE_SIZE);
 }

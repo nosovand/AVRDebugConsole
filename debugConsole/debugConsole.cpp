@@ -301,3 +301,43 @@ uint8_t DebugConsole::receivedString(char* string){
     return 0;
   }
 }
+
+void DebugConsole::readParsedString(char& character, int& number){
+    /**
+     * @brief Read a command string from the SPI buffer and parse it to a character and an integer
+     * @param character: Character to be parsed
+     * @param number: Integer to be parsed
+     * @return None
+    */
+  // command format: "++c1234"
+  // Initialize variables to store the parsed values
+  char parsedChar = '\0';
+  int parsedInt = 0;
+  char* input = SPIReceiveLastMessage();
+
+  
+  //check ++ at the beginning of the message (command)
+  if(input[0] != '+' && input[1] != '+'){
+    return;
+  }
+  
+  // Step 1: Extract the character 
+  if (input[2] != '\0') {
+    parsedChar = input[2];
+  }
+  
+  // Step 2: Extract the integer part
+  // Start from the 4. character in the input string
+  int index = 3;
+  for(index = 3; index < SPIMaxReceiveMessageSize(); index++) {
+    if(input[index] == '\0') break;
+    if(input[index] < 48 || input[index] > 57) break;
+    // Convert ASCII character to integer and add it to the result
+    parsedInt = (parsedInt * 10) + (input[index] - '0');
+  }
+  
+  // Assign the parsed values to the output variables
+  character = parsedChar;
+  number = parsedInt;
+  SPIEraseRxMessageString();
+}
