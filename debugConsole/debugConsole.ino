@@ -31,6 +31,7 @@ void loop() {
   debugConsole.println("");
   debugConsole.println(testConstMessage); 
   debugConsole.print(testConstMessage);
-  debugConsole.println("");
+  debugConsole.println();
   delay(5000);
+
 }
