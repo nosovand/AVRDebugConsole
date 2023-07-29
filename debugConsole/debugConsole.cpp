@@ -274,50 +274,105 @@ uint8_t DebugConsole::available(){
      * @param None
      * @return 1: Message available, 0: No message available
     */
-  return SPIMessageAvailable();
+   if(debugConsoleMode == DEBUG_CONSOLE_MODE_UART){
+    return Serial.available();
+   }
+   else if(debugConsoleMode == DEBUG_CONSOLE_MODE_SPI){
+    return SPIMessageAvailable();
+   }
+   else if(debugConsoleMode == DEBUG_CONSOLE_MODE_UART_AND_SPI){
+    return Serial.available() || SPIMessageAvailable();
+   }
 }
 
-char* DebugConsole::readString(){
-    /**
-     * @brief Read a string from the SPI buffer, dont use to check for specific input
-     * @param None
-     * @return rxMsg: last received string read from the SPI buffer
-    */
-  return SPIReceiveLastMessage();
+const char* DebugConsole::readString(){
+  /**
+    * @brief Read a string from the SPI buffer or Serial
+    * @param None
+    * @return rxMsg: last received string read from the SPI buffer
+  */
+  static String rxString;
+  if(debugConsoleMode == DEBUG_CONSOLE_MODE_UART){
+    rxString = Serial.readString();
+    return rxString.c_str();
+    }
+    else if(debugConsoleMode == DEBUG_CONSOLE_MODE_SPI){
+    return SPIReceiveLastMessage();
+    }
+    else if(debugConsoleMode == DEBUG_CONSOLE_MODE_UART_AND_SPI){
+    if(Serial.available()){
+      rxString = Serial.readString();
+      return rxString.c_str();
+    }
+    else{
+        return SPIReceiveLastMessage();
+    }
+  }
 }
 
 uint8_t DebugConsole::receivedString(char* string){
     /**
-     * @brief Check if a string has been received, use this to check for specific input
+     * @brief Check if the string is part of the input
      * @param string: String to be checked
      * @return 1: String received, 0: String not received
     */
-  char *result = strstr(SPIReceiveLastMessage(), string);
-  SPIEraseRxMessageString();
-  if (result != NULL) {
-    return 1;
-  }
-  else{
-    return 0;
-  }
+   char *result;
+   if(debugConsoleMode == DEBUG_CONSOLE_MODE_UART){
+    result = strstr(Serial.readString().c_str(), string);
+   }
+   else if(debugConsoleMode == DEBUG_CONSOLE_MODE_SPI){
+    result = strstr(SPIReceiveLastMessage(), string);
+    SPIEraseRxMessageString();
+   }
+   else if(debugConsoleMode == DEBUG_CONSOLE_MODE_UART_AND_SPI){
+    if(Serial.available()){
+        result = strstr(Serial.readString().c_str(), string);
+    }
+    else{
+        result = strstr(SPIReceiveLastMessage(), string);
+        SPIEraseRxMessageString();
+    }
+   }
+    return result != NULL;
 }
 
 void DebugConsole::readParsedString(char& character, int& number){
-    /**
-     * @brief Read a command string from the SPI buffer and parse it to a character and an integer
-     * @param character: Character to be parsed
-     * @param number: Integer to be parsed
-     * @return None
-    */
+  /**
+    * @brief Read a command string and parse it to a character and an integer
+    * @param character: Character to be parsed
+    * @param number: Integer to be parsed
+    * @return None
+  */
   // command format: "++c1234"
   // Initialize variables to store the parsed values
   char parsedChar = '\0';
   int parsedInt = 0;
-  char* input = SPIReceiveLastMessage();
+  const char* input;
+  static String rxString;
+
+  if(debugConsoleMode == DEBUG_CONSOLE_MODE_UART){
+    rxString = Serial.readString();
+    input = rxString.c_str();
+  }
+  else if(debugConsoleMode == DEBUG_CONSOLE_MODE_SPI){
+    input = SPIReceiveLastMessage();
+  }
+  else if(debugConsoleMode == DEBUG_CONSOLE_MODE_UART_AND_SPI){
+    if(Serial.available()){
+      rxString = Serial.readString();
+      input = rxString.c_str();
+    }
+    else{
+      input = SPIReceiveLastMessage();
+    }
+  }
+  //char* input = SPIReceiveLastMessage();
 
   //check ++ at the beginning of the message (command)
   if(input[0] != '+' && input[1] != '+'){
-    SPIEraseRxMessageString();
+    if(debugConsoleMode == DEBUG_CONSOLE_MODE_SPI || debugConsoleMode == DEBUG_CONSOLE_MODE_UART_AND_SPI){
+        SPIEraseRxMessageString();
+    }
     return;
   }
   
@@ -339,7 +394,9 @@ void DebugConsole::readParsedString(char& character, int& number){
   // Assign the parsed values to the output variables
   character = parsedChar;
   number = parsedInt;
-  SPIEraseRxMessageString();
+    if(debugConsoleMode == DEBUG_CONSOLE_MODE_SPI || debugConsoleMode == DEBUG_CONSOLE_MODE_UART_AND_SPI){
+        SPIEraseRxMessageString();
+    }
 }
 
 void DebugConsole::println()

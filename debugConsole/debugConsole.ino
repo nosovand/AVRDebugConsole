@@ -35,8 +35,8 @@ void loop() {
   debugConsole.print(testConstMessage);
   debugConsole.println();
   debugConsole.println(debugConsole.available()); 
-  debugConsole.println(debugConsole.readString()); //does not erase input buffer, should not be used for triggering events !!
-  //debugConsole.println(debugConsole.receivedString("++a")); //erases input buffer, can be used to trigger events
+  //debugConsole.println(debugConsole.readString()); //does not erase rx SPI buffer, should not be used for triggering events !!!
+  //debugConsole.println(debugConsole.receivedString("++a")); //erases rx SPI buffer, can be used to trigger events
   debugConsole.readParsedString(c, integer);
   debugConsole.println(c);
   debugConsole.println(integer);
