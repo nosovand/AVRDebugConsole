@@ -5,10 +5,10 @@
  | Released to public domain                                                |
  |                                                                          |
  | This library allows you to use SPI and/or Serial to print messages       |
- | on your AVR processor using a single debug console.                      |
+ | from your AVR device using a single debug console.                       |
  |                                                                          |
- | For SPI an external Mega 2560 board is required running SPITranslator    |
- | software.                                                                |
+ | For SPI communication an external Mega 2560 board is required running    |
+ | SPITranslator software.                                                  |
  |-------------------------------------------------------------------------*/
 
 #ifndef AVR_DEBUG_CONSOLE_HPP
