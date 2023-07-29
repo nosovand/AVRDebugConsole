@@ -592,6 +592,7 @@ char* SPIReceiveLastMessage(){
 }
 
 uint8_t SPIMessageAvailable(){
+  SPIReceiveLastMessage();
   return strlen(rxMsg) > 0;
 }
 
