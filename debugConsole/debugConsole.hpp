@@ -31,6 +31,7 @@ public:
     void readParsedString(char& character, int& number);
     uint8_t receivedString(char* string);
     uint8_t getConsoleMode();
+    void println();
 };
 
 extern DebugConsole debugConsole;

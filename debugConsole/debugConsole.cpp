@@ -341,3 +341,24 @@ void DebugConsole::readParsedString(char& character, int& number){
   number = parsedInt;
   SPIEraseRxMessageString();
 }
+
+void DebugConsole::println()
+{
+    /**
+     * @brief Print a new line
+     * @return None
+    */
+    if (debugConsoleMode == DEBUG_CONSOLE_MODE_SPI)
+    {
+        SPITransferMessageln("");
+    }
+    else if (debugConsoleMode == DEBUG_CONSOLE_MODE_UART)
+    {
+        Serial.println();
+    }
+    else if (debugConsoleMode == DEBUG_CONSOLE_MODE_UART_AND_SPI)
+    {
+        SPITransferMessageln("");
+        Serial.println();
+    }
+}

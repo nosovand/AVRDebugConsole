@@ -33,7 +33,7 @@ void loop() {
   debugConsole.println("");
   debugConsole.println(testConstMessage);
   debugConsole.print(testConstMessage);
-  debugConsole.println("");
+  debugConsole.println();
   debugConsole.println(debugConsole.available()); 
   debugConsole.println(debugConsole.readString()); //does not erase input buffer, should not be used for triggering events !!
   //debugConsole.println(debugConsole.receivedString("++a")); //erases input buffer, can be used to trigger events
@@ -41,4 +41,5 @@ void loop() {
   debugConsole.println(c);
   debugConsole.println(integer);
   delay(5000);
+
 }
