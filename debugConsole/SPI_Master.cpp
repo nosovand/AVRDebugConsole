@@ -587,7 +587,7 @@ uint8_t SPITransferMessageln(double message)
 }
 
 char* SPIReceiveLastMessage(){
-  SPITransferMessageln(F("checking for input"));
+  SPITransferMessage("");
   return rxMsg;
 }
 

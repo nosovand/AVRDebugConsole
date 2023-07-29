@@ -315,9 +315,9 @@ void DebugConsole::readParsedString(char& character, int& number){
   int parsedInt = 0;
   char* input = SPIReceiveLastMessage();
 
-  
   //check ++ at the beginning of the message (command)
   if(input[0] != '+' && input[1] != '+'){
+    SPIEraseRxMessageString();
     return;
   }
   
