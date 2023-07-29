@@ -1,7 +1,7 @@
 # AVRDebugConsole
 
-## This code will allow you to use various AVR interfaces for printing debug messages
-### (Currently implemented interfaces: Serial, SPI)
+##  This library allows you to use SPI and/or Serial to print messages from your AVR device using a single debug console
+### (For SPI communication an external Mega 2560 board is required running SPITranslator software)
 
 ## Repository consists of the two folders:
 
