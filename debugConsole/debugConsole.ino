@@ -1,6 +1,5 @@
 #include "debugConsole.hpp"
-
-const char* testConstMessage = "test const message";
+#include "SPI_Master.hpp"
 
 void setup() {
   // initialize debug console
@@ -9,7 +8,10 @@ void setup() {
   //debugConsole.init(DEBUG_CONSOLE_MODE_SPI);
 }
 
-String testArduinoString = "test arduino string";
+const char* testConstMessage = "test const message";
+String testArduinoString = "test Arduino String";
+char c;
+int integer;
 
 void loop() {
   //print test messages
@@ -29,9 +31,15 @@ void loop() {
   debugConsole.println(testArduinoString);
   debugConsole.print(testArduinoString);
   debugConsole.println("");
-  debugConsole.println(testConstMessage); 
+  debugConsole.println(testConstMessage);
   debugConsole.print(testConstMessage);
   debugConsole.println();
+  debugConsole.println(debugConsole.available()); 
+  //debugConsole.println(debugConsole.readString()); //does not erase rx SPI buffer, should not be used for triggering events !!!
+  //debugConsole.println(debugConsole.receivedString("++a")); //erases rx SPI buffer, can be used to trigger events
+  debugConsole.readParsedString(c, integer);
+  debugConsole.println(c);
+  debugConsole.println(integer);
   delay(5000);
 
 }
