@@ -1,3 +1,16 @@
+/*----------------------- debugConsole header file -------------------------|
+ | libabry version 0.1.0                                                    |
+ |                  																												|
+ | 2023 by Andrey Nosov, https://github.com/nosovand                        |
+ | Released to public domain                                                |
+ |                                                                          |
+ | This library allows you to use SPI and/or Serial to print messages       |
+ | from your AVR device using a single debug console.                       |
+ |                                                                          |
+ | For SPI communication an external Mega 2560 board is required running    |
+ | SPITranslator software.                                                  |
+ |-------------------------------------------------------------------------*/
+
 #ifndef AVR_DEBUG_CONSOLE_HPP
 #define AVR_DEBUG_CONSOLE_HPP
 
